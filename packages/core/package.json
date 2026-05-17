@@ -1,0 +1,54 @@
+{
+  "name": "@ugonfor/ai-npc-world",
+  "version": "0.1.0",
+  "description": "A living village of AI NPCs that remember you — drop-in browser engine for AI-driven NPC worlds",
+  "type": "module",
+  "main": "./dist/ai-npc-world.iife.js",
+  "module": "./dist/ai-npc-world.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/ai-npc-world.mjs",
+      "default": "./dist/ai-npc-world.iife.js"
+    },
+    "./style.css": "./styles/playground.css",
+    "./styles/playground.css": "./styles/playground.css"
+  },
+  "files": [
+    "dist",
+    "src",
+    "styles",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "three": "^0.183.1"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1"
+  },
+  "keywords": [
+    "ai",
+    "npc",
+    "game",
+    "village",
+    "llm",
+    "gemini",
+    "open-world",
+    "three"
+  ],
+  "license": "MIT",
+  "author": "Hyogon Ryu (ugonfor)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ugonfor/ai-npc-world.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/ugonfor/ai-npc-world/issues"
+  },
+  "homepage": "https://github.com/ugonfor/ai-npc-world#readme"
+}

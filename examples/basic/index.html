@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ai-npc-world — basic example</title>
+
+  <link rel="stylesheet" href="../../packages/core/styles/playground.css" />
+
+  <!-- Firebase SDK (optional: only needed for multiplayer). Safe to remove. -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+  <!-- Your local config (copy firebase.config.example.js → firebase.config.js and edit). -->
+  <script src="./firebase.config.js" onerror="window.__NO_FIREBASE_CONFIG__=true"></script>
+</head>
+<body class="playground-page">
+  <div class="pg-world-shell">
+    <div class="pg-world-stage">
+      <canvas id="pg-world-canvas" width="960" height="540" aria-label="ai-npc-world"></canvas>
+
+      <div id="pg-quest-banner" class="pg-quest-banner" hidden>
+        <p id="pg-quest-banner-title" class="pg-quest-banner-title"></p>
+        <p id="pg-quest-banner-objective" class="pg-quest-banner-objective"></p>
+      </div>
+      <div id="pg-toast-container" class="pg-toast-container"></div>
+
+      <div class="pg-mobile-controls" aria-label="Mobile controls">
+        <div class="pg-joystick-wrap">
+          <div id="pg-joystick-base" class="pg-joystick-base">
+            <div id="pg-joystick-knob" class="pg-joystick-knob"></div>
+          </div>
+        </div>
+        <div class="pg-mobile-actions">
+          <button id="pg-mobile-interact" type="button">Talk</button>
+          <button id="pg-mobile-run" type="button">Run</button>
+          <button id="pg-mobile-pause" type="button">Pause</button>
+          <button id="pg-mobile-reset" type="button">Reset View</button>
+          <button id="pg-mobile-utility" type="button" aria-pressed="false">More</button>
+        </div>
+      </div>
+      <div class="pg-mobile-sheet" aria-label="Mobile panels">
+        <button id="pg-mobile-sheet-toggle" type="button" aria-expanded="false">Open Panel</button>
+        <div class="pg-mobile-sheet-tabs" role="tablist">
+          <button id="pg-mobile-tab-controls" type="button" class="pg-mobile-tab is-active" role="tab" aria-selected="true">Controls</button>
+          <button id="pg-mobile-tab-info" type="button" class="pg-mobile-tab" role="tab" aria-selected="false">Info</button>
+          <button id="pg-mobile-tab-log" type="button" class="pg-mobile-tab" role="tab" aria-selected="false">Log</button>
+          <button id="pg-mobile-tab-chat" type="button" class="pg-mobile-tab" role="tab" aria-selected="false">Chat</button>
+        </div>
+      </div>
+
+      <button id="pg-ui-toggle" class="pg-ui-toggle" type="button" aria-expanded="true">Hide UI</button>
+      <button id="pg-audio-toggle" class="pg-audio-btn" type="button" aria-label="Toggle audio">&#x1F50A;</button>
+      <button id="pg-settings-btn" class="pg-settings-btn" type="button" aria-label="Settings">&#x2699;&#xFE0F;</button>
+
+      <div class="pg-panel-toggles" role="group">
+        <button id="pg-toggle-left" type="button" class="pg-panel-toggle is-active" aria-pressed="true">Info</button>
+        <button id="pg-toggle-right" type="button" class="pg-panel-toggle is-active" aria-pressed="true">Log</button>
+        <button id="pg-toggle-chat" type="button" class="pg-panel-toggle is-active" aria-pressed="true">Chat</button>
+      </div>
+
+      <div class="pg-world-ui">
+        <div class="pg-hud-left">
+          <div id="pg-card-controls" class="pg-world-card">
+            <h3>Controls</h3>
+            <div class="pg-controls-help">
+              <p><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Move</p>
+              <p><kbd>Shift</kbd> Run</p>
+              <p><kbd>E</kbd> Talk / Interact</p>
+              <p><kbd>Space</kbd> Reset View</p>
+              <p><kbd>P</kbd> Pause</p>
+            </div>
+            <div class="pg-actions">
+              <button id="pg-save" type="button">Save</button>
+              <button id="pg-load" type="button">Load</button>
+              <button id="pg-rename" type="button">Rename</button>
+            </div>
+          </div>
+          <div id="pg-card-info" class="pg-world-card">
+            <h3>Character Management</h3>
+            <div class="pg-create-row">
+              <input id="pg-create-name" type="text" maxlength="18" placeholder="Name" />
+              <button id="pg-create-btn" type="button">Create</button>
+            </div>
+            <div class="pg-create-row">
+              <select id="pg-remove-select"><option value="">Select NPC</option></select>
+              <button id="pg-remove-btn" type="button">Remove</button>
+            </div>
+            <div class="pg-create-row pg-create-row-single">
+              <input id="pg-create-personality" type="text" maxlength="60" placeholder="Personality (optional)" />
+            </div>
+            <p id="pg-create-status">NPCs you create are shared with all visitors.</p>
+          </div>
+          <div id="pg-card-status" class="pg-world-card">
+            <div class="pg-card-header">
+              <h3>World Status</h3>
+              <button id="pg-status-toggle" type="button" aria-expanded="true">Collapse</button>
+            </div>
+            <div id="pg-status-body">
+              <p id="pg-time">Time: --:--</p>
+              <p id="pg-player">Player: --</p>
+              <p id="pg-online" hidden>Online: --</p>
+              <p id="pg-nearby">Nearby: --</p>
+              <p id="pg-quest">Quest: --</p>
+              <p id="pg-rel">Relationships: --</p>
+              <canvas id="pg-minimap" width="240" height="190"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="pg-hud-right">
+          <div id="pg-card-log" class="pg-world-card">
+            <div class="pg-card-header">
+              <h3>Event Log</h3>
+              <button id="pg-log-toggle" type="button" aria-expanded="true">Collapse</button>
+            </div>
+            <div id="pg-log-body">
+              <div id="pg-log" class="pg-log"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg-chat-dock">
+        <div class="pg-chat-title-row">
+          <h3 class="pg-chat-title">NPC Chat</h3>
+          <button id="pg-chat-close" type="button">End Chat</button>
+        </div>
+        <p id="pg-chat-target" class="pg-chat-target-line">Target: None</p>
+        <div class="pg-chat-meta">
+          <p id="pg-chat-active-target">Target: None</p>
+          <p id="pg-chat-active-state">Status: No chat</p>
+          <p id="pg-chat-model">Model: Local response</p>
+        </div>
+        <div id="pg-chat-log" class="pg-chat-log pg-chat-log-dock"></div>
+        <div id="pg-chat-suggestions" class="pg-chat-suggestions"></div>
+        <div class="pg-chat-input-row">
+          <input id="pg-chat-input" type="text" placeholder="Talk to an NPC..." />
+          <button id="pg-chat-send" type="button">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pg-name-modal" class="pg-name-modal" hidden>
+      <div class="pg-name-modal-box">
+        <h3>&#x1F3D8;&#xFE0F; Welcome to the Village</h3>
+        <label for="pg-name-input">Your Name</label>
+        <input id="pg-name-input" type="text" maxlength="18" placeholder="Enter your name" />
+        <button id="pg-name-lang-ko" type="button" hidden></button>
+        <button id="pg-name-lang-en" type="button" hidden></button>
+        <button id="pg-name-confirm" type="button">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game engine (built from packages/core). -->
+  <script src="../../packages/core/dist/ai-npc-world.iife.js"></script>
+  <script>
+    PlaygroundWorld.init({
+      llmApiUrl: (window.AI_NPC_WORLD_CONFIG && window.AI_NPC_WORLD_CONFIG.llmApiUrl) || 'http://127.0.0.1:8787/api/npc-chat',
+      firebase: window.AI_NPC_WORLD_CONFIG && window.AI_NPC_WORLD_CONFIG.firebase,
+      locale: 'en',
+    });
+  </script>
+</body>
+</html>

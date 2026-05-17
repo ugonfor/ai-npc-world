@@ -1,0 +1,21 @@
+{
+  "name": "ai-npc-world-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A living village of AI NPCs that remember you",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ugonfor/ai-npc-world.git"
+  },
+  "license": "MIT",
+  "author": "Hyogon Ryu (ugonfor)",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspace=@ugonfor/ai-npc-world",
+    "test": "npm test --workspaces --if-present"
+  }
+}

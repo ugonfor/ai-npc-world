@@ -1,0 +1,41 @@
+{
+  "name": "@ugonfor/ai-npc-world-server",
+  "version": "0.1.0",
+  "description": "LLM proxy server for ai-npc-world (Google Gemini)",
+  "type": "module",
+  "main": "./llm-proxy.mjs",
+  "bin": {
+    "ai-npc-world-server": "./llm-proxy.mjs"
+  },
+  "files": [
+    "llm-proxy.mjs",
+    "firebase-rules.json",
+    "Dockerfile",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node llm-proxy.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "ai-npc-world",
+    "llm",
+    "proxy",
+    "gemini",
+    "google-ai"
+  ],
+  "license": "MIT",
+  "author": "Hyogon Ryu (ugonfor)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ugonfor/ai-npc-world.git",
+    "directory": "packages/server"
+  },
+  "bugs": {
+    "url": "https://github.com/ugonfor/ai-npc-world/issues"
+  },
+  "homepage": "https://github.com/ugonfor/ai-npc-world#readme"
+}
