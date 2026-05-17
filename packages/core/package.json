@@ -1,6 +1,6 @@
 {
   "name": "@ugonfor/ai-npc-world",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A living village of AI NPCs that remember you — drop-in browser engine for AI-driven NPC worlds",
   "type": "module",
   "main": "./dist/ai-npc-world.iife.js",
