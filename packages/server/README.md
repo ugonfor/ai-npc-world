@@ -29,7 +29,7 @@ Server listens on `127.0.0.1:8787` by default. Override with `PORT` / `HOST`.
 | `GOOGLE_API_KEY` | (required) | Google AI Studio key for Gemini |
 | `PORT` | `8787` | Listen port |
 | `HOST` | `127.0.0.1` | Listen host (auto `0.0.0.0` on Cloud Run) |
-| `MODEL_CHAIN` | `gemini-2.5-flash,gemini-3-flash-preview,gemini-2.5-flash-lite,gemma-3-27b-it` | Fallback chain |
+| `MODEL_CHAIN` | `gemini-2.5-flash,gemini-3-flash-preview,gemini-2.5-flash-lite,gemma-4-31b-it` | Fallback chain |
 | `ALLOWED_ORIGINS` | `http://localhost:4000,...` | CORS allowlist (comma-separated) |
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window per IP |
 | `RATE_LIMIT_MAX` | `90` | Requests per window |

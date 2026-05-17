@@ -11,7 +11,7 @@ const HOST = process.env.HOST || (process.env.K_SERVICE ? "0.0.0.0" : "127.0.0.1
 const TRUST_PROXY = String(process.env.TRUST_PROXY || (process.env.K_SERVICE ? "true" : "false")).toLowerCase() === "true";
 const API_KEY = process.env.GOOGLE_API_KEY || "";
 const MODEL_CHAIN = (process.env.MODEL_CHAIN ||
-  "gemini-2.5-flash,gemini-3-flash-preview,gemini-2.5-flash-lite,gemma-3-27b-it")
+  "gemini-2.5-flash,gemini-3-flash-preview,gemini-2.5-flash-lite,gemma-4-31b-it")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
