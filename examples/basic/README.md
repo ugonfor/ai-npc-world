@@ -12,11 +12,12 @@ npm run build                        # builds packages/core/dist
 cp examples/basic/firebase.config.example.js examples/basic/firebase.config.js
 # (optional) edit firebase.config.js with your Firebase + LLM proxy URL
 
-# serve the examples folder (any static server works)
-npx serve examples/basic -l 4000
+# serve the repo root (any static server works): the page loads
+# ../../packages/core/dist and ../../packages/core/styles
+npx serve . -l 4000
 ```
 
-Open http://localhost:4000.
+Open http://localhost:4000/examples/basic/ with the trailing slash. Without it, `./firebase.config.js` resolves one folder too high and your config is silently ignored.
 
 ## Wire up the LLM proxy (optional but recommended)
 

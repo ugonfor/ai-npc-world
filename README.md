@@ -62,10 +62,10 @@ npm run build
 GOOGLE_API_KEY=your_gemini_key npm start --workspace=@ugonfor/ai-npc-world-server
 
 # in another: the example page
-npx serve examples/basic -l 4000
+npx serve . -l 4000
 ```
 
-Open http://localhost:4000.
+Open http://localhost:4000/examples/basic/ (the page loads the engine from `packages/core/dist`, so serve the repo root).
 
 See [examples/basic/README.md](./examples/basic/README.md) for Firebase wiring.
 
